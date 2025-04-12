@@ -34,17 +34,23 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# ios/android
 ios/
 android/
 
+# Firebase config files
 google-services.json
+GoogleService-Info.plist
 extracted-app
-googleservice-info.plist
+
+# Environment files
 .env
 .env.local
+.env.staging
 build-*
 credentials.json
-.env.local
+
+# IDE
 .idea
 /e2e/screenshots
 appium.log
