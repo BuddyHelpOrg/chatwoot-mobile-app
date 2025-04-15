@@ -38,6 +38,7 @@
     "test:e2e:android:verbose": "NODE_OPTIONS=\"--experimental-vm-modules\" VERBOSE=true jest e2e/android/specs/login.test.js --config=e2e/jest.config.js",
     "test:e2e:report": "node e2e/utils/show-reports.js",
     "test:e2e:all": "NODE_OPTIONS=\"--experimental-vm-modules\" jest e2e/*/specs/*.test.js --config=e2e/jest.config.js",
+    "test:e2e:with-creds": "TEST_USER_EMAIL=your@email.com TEST_USER_PASSWORD=yourpassword EXPO_PUBLIC_CHATWOOT_BASE_URL=https://app.chatwoot.com pnpm test:e2e:all",
     "test:e2e:ios:timeout": "NODE_OPTIONS=\"--experimental-vm-modules\" node e2e/run-with-timeout.js 120 e2e/ios/specs/login.test.js",
     "test:e2e:android:timeout": "NODE_OPTIONS=\"--experimental-vm-modules\" node e2e/run-with-timeout.js 120 e2e/android/specs/login.test.js",
     "e2e:timeout": "pnpm test:e2e:ios:timeout && pnpm test:e2e:android:timeout",
