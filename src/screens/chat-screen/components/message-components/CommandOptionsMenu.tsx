@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Linking, Platform, Pressable, Text } from 'react-native';
-import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import * as DocumentPicker from 'expo-document-picker';
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
@@ -17,8 +17,9 @@ import i18n from '@/i18n';
 import { showToast } from '@/utils/toastUtils';
 import { findFileSize } from '@/utils/fileUtils';
 import { getApiLevel } from 'react-native-device-info';
+import { Dispatch } from 'redux';
 
-export const handleOpenPhotosLibrary = async dispatch => {
+export const handleOpenPhotosLibrary = async (dispatch: Dispatch) => {
   if (Platform.OS === 'ios') {
     request(
       Platform.OS === 'ios'
@@ -108,7 +109,7 @@ export const handleOpenPhotosLibrary = async dispatch => {
   }
 };
 
-const handleLaunchCamera = async dispatch => {
+const handleLaunchCamera = async (dispatch: Dispatch) => {
   request(Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA).then(
     async result => {
       if (RESULTS.BLOCKED === result) {
@@ -150,52 +151,57 @@ const handleLaunchCamera = async dispatch => {
 
 /**
  * Doing this so that the our Store Object Attachments is of single type - Asset from Image Picker Library
- * The function `mapObject` takes an object of type `DocumentPickerResponse` and returns an array of
+ * The function `mapObject` takes an object of type DocumentPicker document and returns an array of
  * `Asset` objects with properties `fileName`, `fileSize`, `type`, and `uri`.
- * @param {DocumentPickerResponse} originalObject - The originalObject parameter is of type
- * DocumentPickerResponse.
  * @returns The function `mapObject` is returning an array of `Asset` objects.
  */
-const mapObject = (originalObject: DocumentPickerResponse): Asset[] => {
+const mapObject = (originalObject: DocumentPicker.DocumentPickerResult): Asset[] => {
+  if (!originalObject.assets || !originalObject.assets[0]) {
+    return [];
+  }
+
+  const document = originalObject.assets[0];
   return [
     {
-      fileName: originalObject.name || '',
-      fileSize: originalObject.size || 0,
-      type: originalObject.type || '',
-      uri: originalObject.uri || '',
+      fileName: document.name || '',
+      fileSize: document.size || 0,
+      type: document.mimeType || '',
+      uri: document.uri || '',
     },
   ];
 };
 
-const handleAttachFile = async dispatch => {
+const handleAttachFile = async (dispatch: Dispatch) => {
   try {
-    const result = await DocumentPicker.pick({
+    const result = await DocumentPicker.getDocumentAsync({
       type: [
-        DocumentPicker.types.allFiles,
-        DocumentPicker.types.images,
-        DocumentPicker.types.plainText,
-        DocumentPicker.types.audio,
-        DocumentPicker.types.pdf,
-        DocumentPicker.types.zip,
-        DocumentPicker.types.csv,
-        DocumentPicker.types.doc,
-        DocumentPicker.types.docx,
-        DocumentPicker.types.ppt,
-        DocumentPicker.types.pptx,
-        DocumentPicker.types.xls,
-        DocumentPicker.types.xlsx,
-      ], // You can specify the file types you want to allow
-      presentationStyle: 'formSheet',
+        'application/pdf',
+        'image/*',
+        'text/plain',
+        'audio/*',
+        'application/zip',
+        'text/csv',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        '*/*',
+      ],
+      multiple: false,
+      copyToCacheDirectory: true,
     });
-    // TODO: Support multiple files
-    const file = mapObject(result[0])[0];
+
+    if (result.canceled) {
+      // User cancelled the picker
+      return;
+    }
+
+    const file = mapObject(result)[0];
     validateFileAndSetAttachments(dispatch, file);
   } catch (err) {
-    if (DocumentPicker.isCancel(err)) {
-      // User cancelled the picker
-    } else {
-      throw err;
-    }
+    console.error('Error picking document:', err);
   }
 };
 
@@ -222,9 +228,9 @@ const ADD_MENU_OPTIONS = [
   },
 ];
 
-export const validateFileAndSetAttachments = async (dispatch, attachment) => {
+export const validateFileAndSetAttachments = async (dispatch: Dispatch, attachment: Asset) => {
   const { fileSize } = attachment;
-  if (findFileSize(fileSize) <= MAXIMUM_FILE_UPLOAD_SIZE) {
+  if (findFileSize(fileSize || 0) <= MAXIMUM_FILE_UPLOAD_SIZE) {
     dispatch(updateAttachments([attachment]));
   } else {
     showToast({ message: i18n.t('CONVERSATION.FILE_SIZE_LIMIT') });

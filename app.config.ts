@@ -87,7 +87,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           url: process.env.EXPO_PUBLIC_SENTRY_URL, // TODO:add literal url
           project: 'BuddyHelp',
           organization: 'BuddyHelp',
-
         },
       ],
       '@react-native-firebase/app',
@@ -105,15 +104,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           },
           ios: {
             useFrameworks: 'static',
-          },
-        },
-      ],
-      [
-        '@config-plugins/ffmpeg-kit-react-native',
-        {
-          package: 'min',
-          ios: {
-            package: 'audio',
           },
         },
       ],

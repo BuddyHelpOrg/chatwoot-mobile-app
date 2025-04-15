@@ -1,81 +1,44 @@
-import RNFS from 'react-native-fs';
-import { FFmpegKit } from 'ffmpeg-kit-react-native';
 import * as Sentry from '@sentry/react-native';
+import * as FileSystem from 'expo-file-system';
+
+// TODO: Implement full audio conversion using a different approach
+// The previous ffmpeg-kit-react-native package is deprecated and has been removed
+// Currently returning original URLs, but will need a complete solution
 
 export const convertOggToMp3 = async (oggUrl: string): Promise<string> => {
-  const tempOggPath = `${RNFS.CachesDirectoryPath}/temp.ogg`;
-  const fileName = `converted_${Date.now()}.mp3`;
-  const outputPath = `${RNFS.CachesDirectoryPath}/${fileName}`;
-
   try {
-    // Download the OGG file and wait for completion
-    const downloadResult = await RNFS.downloadFile({
-      fromUrl: oggUrl,
-      toFile: tempOggPath,
-    }).promise;
+    // For now, just log that conversion is skipped and return the original URL
+    console.log('Audio conversion skipped: ffmpeg functionality is not available');
 
-    // Verify download was successful
-    if (downloadResult.statusCode !== 200) {
-      throw new Error(`Download failed with status ${downloadResult.statusCode}`);
-    }
+    // We can still download the file to make it available locally
+    const fileName = `audio_${Date.now()}.ogg`;
+    const localUri = `${FileSystem.cacheDirectory}${fileName}`;
 
-    // Verify file exists before conversion
-    const fileExists = await RNFS.exists(tempOggPath);
-    if (!fileExists) {
+    // Download the file
+    await FileSystem.downloadAsync(oggUrl, localUri);
+
+    // Check if the download was successful
+    const fileInfo = await FileSystem.getInfoAsync(localUri);
+    if (!fileInfo.exists) {
       throw new Error('Downloaded file not found');
     }
 
-    // Convert OGG to mp3 using ffmpeg
-    await FFmpegKit.execute(
-      `-i "${tempOggPath}" -vn -y -ar 44100 -ac 2 -c:a libmp3lame -b:a 192k "${outputPath}"`,
-    );
-
-    // Clean up the temporary OGG file
-    if (await RNFS.exists(tempOggPath)) {
-      await RNFS.unlink(tempOggPath);
-    }
-
-    // Verify output file exists
-    const outputExists = await RNFS.exists(outputPath);
-    if (!outputExists) {
-      throw new Error('Conversion failed - output file not found');
-    }
-
-    return `file://${outputPath}`;
+    return localUri;
   } catch (error) {
     Sentry.captureException(error);
-    // Clean up any temporary files in case of error
-    try {
-      if (await RNFS.exists(tempOggPath)) {
-        await RNFS.unlink(tempOggPath);
-      }
-    } catch (cleanupError) {
-      Sentry.captureException(cleanupError);
-      // console.error('Error during cleanup:', cleanupError);
-    }
-    return oggUrl;
+    return oggUrl; // Fallback to original URL
   }
 };
 
 export const convertAacToMp3 = async (inputPath: string): Promise<string> => {
   try {
-    const fileName = `converted_${Date.now()}.mp3`;
-    const outputPath = `${RNFS.CachesDirectoryPath}/${fileName}`;
+    // For now, just log that conversion is skipped and return the original URL
+    console.log('Audio conversion skipped: ffmpeg functionality is not available');
 
-    // Convert to MP3 using FFmpeg with optimal settings
-    await FFmpegKit.execute(
-      `-i "${inputPath}" -vn -y -ar 44100 -ac 2 -c:a libmp3lame -b:a 192k "${outputPath}"`,
-    );
-
-    // Verify output file exists
-    const outputExists = await RNFS.exists(outputPath);
-    if (!outputExists) {
-      throw new Error('Conversion failed - output file not found');
-    }
-
-    return `file://${outputPath}`;
+    // Just return the original path since we can't convert without ffmpeg
+    return inputPath;
   } catch (error) {
     Sentry.captureException(error);
-    throw error;
+    return inputPath; // Fallback to original path
   }
 };
