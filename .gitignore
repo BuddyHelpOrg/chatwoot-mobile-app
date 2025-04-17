@@ -49,3 +49,4 @@ credentials.json
 /e2e/screenshots
 appium.log
 emulator.log
+GoogleService-Info.plist
