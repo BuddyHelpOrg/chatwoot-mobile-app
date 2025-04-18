@@ -1,121 +1,130 @@
-# Chatwoot Mobile App E2E Testing
+# E2E Testing with Appium and Jest
 
-This directory contains end-to-end testing for the Chatwoot mobile app using Appium.
+This directory contains end-to-end tests for the BuddyHelp mobile app using Appium and Jest.
 
-## Setup
+## Prerequisites
 
-1. Install the required dependencies:
-   ```bash
-   pnpm install
-   ```
+- Node.js and pnpm installed
+- Appium server installed: `pnpm add -g appium`
+- Appium drivers installed:
+  - iOS: `appium driver install xcuitest`
+  - Android: `appium driver install uiautomator2`
+- iOS: Xcode with simulators
+- Android: Android Studio with emulators
 
-2. Install Appium globally (optional, can use npx instead):
-   ```bash
-   npm install -g appium
-   ```
+## Directory Structure
 
-3. Install Appium drivers for iOS and Android:
-   ```bash
-   appium driver install xcuitest
-   appium driver install uiautomator2
-   ```
-
-4. Set up environment variables for testing. Copy the example .env file and modify it:
-   ```bash
-   cp e2e/.env.example e2e/.env
-   ```
-   
-   Then edit the file to add your test credentials:
-   ```
-   TEST_USER_EMAIL=your_test_user@example.com
-   TEST_USER_PASSWORD=your_password
-   EXPO_PUBLIC_CHATWOOT_BASE_URL=https://your-chatwoot-instance.com
-   ```
-
-## Checking the Environment
-
-Before running tests, it's recommended to check your environment to ensure everything is set up correctly:
-
-```bash
-pnpm check:environment
-```
-
-This will:
-- Check Appium installation
-- Run Appium doctor to identify any issues
-- Detect available iOS simulators
-- Check for Chatwoot app on simulators
-- Check for connected Android devices
-
-The script will create a file called `simulators.json` with information about available simulators. This file is used by the tests to automatically detect and use the correct simulator.
-
-## Starting Appium Server
-
-Start the Appium server in a separate terminal:
-
-```bash
-pnpm appium
-```
-
-This will start the Appium server on port 4723 with the base path `/wd/hub`.
+- `android/specs/` - Android test cases
+- `ios/specs/` - iOS test cases
+- `utils/` - Helper utilities
+- `config/` - Test configuration files
+- `screenshots/` - Generated test screenshots
+- `reports/` - Generated test reports
 
 ## Running Tests
 
-### iOS Testing
+### Start Appium Server
 
-To run the iOS test:
+You need to have an Appium server running before tests. The tests will attempt to start one automatically, but you can also start it manually:
+
+```bash
+appium --address 127.0.0.1 --port 4723 --log-level info --base-path /wd/hub
+```
+
+### Run iOS Tests
 
 ```bash
 pnpm test:e2e:ios
 ```
 
-The iOS test will:
-1. Connect to an iOS simulator using the iOS version detected
-2. Open Safari and navigate to the Chatwoot URL
-3. Attempt to log in using the credentials from your .env file
-4. Take screenshots during the process for debug purposes
+For verbose output:
 
-### Android Testing
+```bash
+pnpm test:e2e:ios:verbose
+```
 
-To run the Android test:
+### Run Android Tests
 
 ```bash
 pnpm test:e2e:android
 ```
 
-The Android test will:
-1. Connect to an Android emulator
-2. Perform similar actions to the iOS test
+For verbose output:
+
+```bash
+pnpm test:e2e:android:verbose
+```
+
+### Run All Tests
+
+```bash
+pnpm test:e2e:all
+```
+
+### Run with Credentials
+
+To run tests with real credentials:
+
+```bash
+TEST_USER_EMAIL=your@email.com TEST_USER_PASSWORD=yourpassword EXPO_PUBLIC_CHATWOOT_BASE_URL=https://app.chatwoot.com pnpm test:e2e:all
+```
+
+Or use the predefined script (update with your credentials first):
+
+```bash
+pnpm test:e2e:with-creds
+```
+
+## Test Reports
+
+Test results are displayed in the console with Jest's output format. Screenshots are saved to the `screenshots/` directory.
+
+To view a summary of recent test runs:
+
+```bash
+pnpm test:e2e:report
+```
 
 ## Troubleshooting
 
-If tests fail, check the following:
+### Common Issues
 
-1. Appium server is running
-2. iOS simulator or Android emulator is available
-3. Correct app is installed (or Safari/Chrome is being used)
-4. Environment variables are set correctly
-5. Check the screenshots in e2e/screenshots directory for visual debugging
+1. **App not installed**: Ensure you have built the app for the target platform:
+   ```bash
+   pnpm build:ios:local
+   pnpm build:android:local
+   ```
 
-For more detailed diagnostics, run:
+2. **Appium server not starting**: Check if there's already an Appium instance running on port 4723.
 
-```bash
-npx appium driver doctor xcuitest
+3. **Device not found**: Ensure you have a simulator/emulator available.
+
+4. **Test fails to find elements**: Check the screenshots in the `screenshots/` directory to see what the app state was during the test.
+
+### Debugging Tips
+
+- Use verbose mode to see more details
+- Check the screenshots generated during test runs
+- XML page sources are saved when errors occur for debugging purposes
+
+## Creating New Tests
+
+Follow the existing pattern using Jest's describe/it format. Each test should:
+
+1. Use descriptive names for tests
+2. Have proper assertions and error handling
+3. Take screenshots at key steps
+4. Implement proper error reporting
+
+Example:
+
+```javascript
+describe('Feature Test', () => {
+  // Setup code
+  
+  it('should perform specific action', async () => {
+    // Test code
+    expect(result).toBe(expectedValue);
+  });
+});
 ```
-
-or 
-
-```bash
-npx appium driver doctor uiautomator2
-```
-
-## App vs Web Testing
-
-The tests are initially configured to test with Safari (iOS) or Chrome (Android) to ensure that the basic setup is working. Once confirmed, you can enable app testing by uncommenting the app-specific configuration in the test files.
-
-## Adding More Tests
-
-To add more tests:
-1. Create new test files in e2e/ios/specs or e2e/android/specs
-2. Follow the same structure as the existing login tests
-3. Use the BatchTool pattern for improved organization

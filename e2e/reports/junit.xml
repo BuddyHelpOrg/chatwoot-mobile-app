@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="18.229">
+  <testsuite name="iOS App Login" errors="0" failures="0" skipped="0" timestamp="2025-04-14T18:37:07" time="18.185" tests="3">
+    <testcase classname="iOS App Login should launch the app successfully" name="iOS App Login should launch the app successfully" time="0.523">
+    </testcase>
+    <testcase classname="iOS App Login should find and interact with login form elements" name="iOS App Login should find and interact with login form elements" time="5.247">
+    </testcase>
+    <testcase classname="iOS App Login should submit login form and verify login status" name="iOS App Login should submit login form and verify login status" time="6.241">
+    </testcase>
+  </testsuite>
+</testsuites>
