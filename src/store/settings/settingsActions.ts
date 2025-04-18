@@ -109,9 +109,15 @@ export const settingsActions = {
         }
 
         const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-        // https://github.com/invertase/react-native-firebase/issues/6893#issuecomment-1427998691
-        // await messaging().registerDeviceForRemoteMessages();
-        await sleep(1000);
+        
+        // Make sure iOS is registered for remote notifications
+        if (Platform.OS === 'ios') {
+          await messaging().registerDeviceForRemoteMessages();
+        } else {
+          // For Android, we still use the workaround with sleep
+          await sleep(1000);
+        }
+        
         const fcmToken = await messaging().getToken();
 
         const pushData: PushPayload = {
