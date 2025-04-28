@@ -12,7 +12,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     splash: {
       image: './assets/splash.png',
       resizeMode: 'contain',
-      backgroundColor: '#ffffff',
+      backgroundColor: '#b0c4de',
       enableFullScreenImage_legacy: true,
     },
     ios: {
@@ -88,7 +88,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           url: process.env.EXPO_PUBLIC_SENTRY_URL, // TODO:add literal url
           project: 'BuddyHelp',
           organization: 'BuddyHelp',
-
         },
       ],
       '@react-native-firebase/app',
