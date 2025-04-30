@@ -10,25 +10,59 @@
     },
     "preview": {
       "distribution": "internal",
+      "autoIncrement": true,
       "ios": {
-        "simulator": true
+        "resourceClass": "m-medium",
+        "buildConfiguration": "Release",
+        "credentialsSource": "remote"
+      },
+      "android": {
+        "buildType": "apk",
+        "resourceClass": "medium"
       }
     },
     "production": {
       "autoIncrement": true,
       "ios": {
-        "credentialsSource": "local",
+        "credentialsSource": "remote",
         "enterpriseProvisioning": "adhoc",
         "buildConfiguration": "Release",
-        "distribution": "internal",
-        "image": "latest"
+        "distribution": "store",
+        "image": "latest",
+        "resourceClass": "m-medium"
+      },
+      "android": {
+        "buildType": "app-bundle",
+        "resourceClass": "medium"
       }
     }
   },
   "submit": {
+    "preview": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
+      },
+      "ios": {
+        "appleId": "${EXPO_APPLE_ID}",
+        "ascAppId": "${EXPO_ASC_APP_ID}",
+        "appleTeamId": "${EXPO_APPLE_TEAM_ID}",
+        "sku": "org.buddyhelp.app",
+        "companyName": "BuddyHelp",
+        "releaseType": "beta"
+      }
+    },
     "production": {
       "android": {
         "track": "internal"
+      },
+      "ios": {
+        "appleId": "${EXPO_APPLE_ID}",
+        "ascAppId": "${EXPO_ASC_APP_ID}",
+        "appleTeamId": "${EXPO_APPLE_TEAM_ID}",
+        "sku": "org.buddyhelp.app",
+        "companyName": "BuddyHelp",
+        "releaseType": "beta"
       }
     }
   }
