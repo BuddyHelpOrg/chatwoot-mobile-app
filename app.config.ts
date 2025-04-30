@@ -27,7 +27,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         NSAppleMusicUsageDescription:
           'This app does not use Apple Music, but a system API may require this permission.',
         UIBackgroundModes: ['fetch', 'remote-notification'],
-        ITSAppUsesNonExemptEncryption: false, //todo: look if this is needed
+        ITSAppUsesNonExemptEncryption: false,
       },
       // Using Google Services file in project root
       googleServicesFile: './GoogleService-Info.plist',
@@ -102,21 +102,14 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             targetSdkVersion: 34,
             extraMavenRepos: ['$rootDir/../../../node_modules/@notifee/react-native/android/libs'],
             enableProguardInReleaseBuilds: true,
+            exclude: ['ffmpeg-kit-react-native'],
           },
           ios: {
             useFrameworks: 'static',
           },
         },
       ],
-      [
-        '@config-plugins/ffmpeg-kit-react-native',
-        {
-          package: 'min',
-          ios: {
-            package: 'audio',
-          },
-        },
-      ],
+      './with-ffmpeg-pod.js',
     ],
     androidNavigationBar: {
       backgroundColor: '#ffffff',
