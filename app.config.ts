@@ -108,9 +108,16 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           },
         },
       ],
+      './with-ffmpeg-pod',
     ],
     androidNavigationBar: {
       backgroundColor: '#ffffff',
     },
+    updates: {
+      url: 'https://u.expo.dev/effc2cf0-e2a3-4e8f-8ff1-ed9ef0e876ca'
+    },
+    runtimeVersion: {
+      policy: 'appVersion'
+    }
   };
 };
