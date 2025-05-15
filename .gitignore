@@ -38,10 +38,17 @@ ios/
 android/
 
 google-services.json
-extracted-app
-googleservice-info.plist
+GoogleService-Info.plist
 .env
 .env.local
 build-*
 credentials.json
 .env.local
+.idea
+/e2e/screenshots
+appium.log
+emulator.log
+/.idea
+
+
+.cursor/
