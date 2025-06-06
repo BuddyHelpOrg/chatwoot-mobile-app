@@ -12,21 +12,19 @@
         "SENTRY_DISABLE_AUTO_UPLOAD": "true"
       }
     },
-    "development": {
-      "distribution": "internal",
+    "staging": {
+      "distribution": "store",
       "autoIncrement": true,
       "channel": "staging",
       "env": {
         "SENTRY_DISABLE_AUTO_UPLOAD": "true"
       },
       "ios": {
-        "resourceClass": "m-medium",
         "buildConfiguration": "Release",
         "credentialsSource": "remote"
       },
       "android": {
-        "buildType": "apk",
-        "resourceClass": "medium"
+        "buildType": "app-bundle"
       }
     },
     "production": {
@@ -38,31 +36,21 @@
       "ios": {
         "credentialsSource": "remote",
         "buildConfiguration": "Release",
-        "distribution": "store",
-        "resourceClass": "m-medium"
+        "distribution": "store"
       },
       "android": {
-        "buildType": "app-bundle",
-        "resourceClass": "medium"
+        "buildType": "app-bundle"
       }
     }
   },
   "submit": {
-    "development": {
+    "staging": {
       "ios": {
         "ascAppId": "6742459134"
       },
       "android": {
         "track": "internal",
-        "releaseStatus": "draft"
-      }
-    },
-    "production": {
-      "ios": {
-        "ascAppId": "6742459134"
-      },
-      "android": {
-        "track": "internal"
+        "releaseStatus": "completed"
       }
     }
   }
