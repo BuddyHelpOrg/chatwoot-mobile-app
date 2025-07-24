@@ -37,6 +37,8 @@ yarn-error.*
 ios/
 android/
 
+# Removed google-services.json and GoogleService-Info.plist from gitignore
+# These files need to be tracked for EAS builds to work properly
 google-services.json
 GoogleService-Info.plist
 .env
@@ -50,5 +52,7 @@ appium.log
 emulator.log
 /.idea
 
+# Google Service Account Key for EAS Submit (contains sensitive credentials)
+buddyhelp-app-firebase-adminsdk-fbsvc-3daab4bf2b.json
 
-.cursor/
+

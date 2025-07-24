@@ -29,8 +29,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         UIBackgroundModes: ['fetch', 'remote-notification'],
         ITSAppUsesNonExemptEncryption: false, //todo: look if this is needed
       },
-      // Using Google Services file in project root
-      googleServicesFile: './GoogleService-Info.plist',
+      // Use secret environment variable for Google Services file
+      googleServicesFile: process.env.IOS_GOOGLE_SERVICES_FILE ?? './GoogleService-Info.plist',
       entitlements: {
         'aps-environment': 'production',
       },
@@ -49,8 +49,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         'android.permission.RECORD_AUDIO',
         'android.permission.READ_MEDIA_IMAGES',
       ],
-      // Use google-services.json in project root
-      googleServicesFile: './google-services.json',
+      // Use secret environment variable for Google Services file
+      googleServicesFile: process.env.ANDROID_GOOGLE_SERVICES_FILE ?? './google-services.json',
       intentFilters: [
         {
           action: 'VIEW',
@@ -88,7 +88,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           url: process.env.EXPO_PUBLIC_SENTRY_URL, // TODO:add literal url
           project: 'BuddyHelp',
           organization: 'BuddyHelp',
-
+          autoUpload: false, // Disable auto uploading
+          disableAutoUpload: true, // Alternative way to disable auto uploading
         },
       ],
       '@react-native-firebase/app',
@@ -109,16 +110,17 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           },
         },
       ],
-      './with-ffmpeg-pod',
+      // TODO: Re-enable FFmpeg when Android dependency issue is resolved
+      // './with-ffmpeg-pod',
     ],
     androidNavigationBar: {
       backgroundColor: '#ffffff',
     },
     updates: {
-      url: 'https://u.expo.dev/effc2cf0-e2a3-4e8f-8ff1-ed9ef0e876ca'
+      url: 'https://u.expo.dev/effc2cf0-e2a3-4e8f-8ff1-ed9ef0e876ca',
     },
     runtimeVersion: {
-      policy: 'appVersion'
-    }
+      policy: 'appVersion',
+    },
   };
 };
