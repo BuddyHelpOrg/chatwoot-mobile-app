@@ -43,7 +43,7 @@ export const MacrosList = ({ conversationId }: { conversationId: number }) => {
         handleStyle={tailwind.style('p-0 h-4 pt-[5px]')}
         style={tailwind.style('rounded-t-[26px] overflow-hidden')}
         enablePanDownToClose
-        snapPoints={['75%']}
+        snapPoints={['95%']}
         enableDynamicSizing={false}>
         <MacroProvider conversationId={conversationId} onClose={onClose}>
           <Animated.View style={tailwind.style('flex-1')}>

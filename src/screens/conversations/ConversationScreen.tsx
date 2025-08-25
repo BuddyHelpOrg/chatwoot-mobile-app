@@ -297,15 +297,15 @@ const ConversationScreen = () => {
   const filterSnapPoints = useMemo(() => {
     switch (currentBottomSheet) {
       case 'status':
-        return [290];
+        return ['95%'];
       case 'sort_by':
-        return [200];
+        return ['95%'];
       case 'assignee_type':
-        return [200];
+        return ['95%'];
       case 'inbox_id':
-        return ['70%'];
+        return ['95%'];
       default:
-        return [250];
+        return ['95%'];
     }
   }, [currentBottomSheet]);
 
@@ -329,6 +329,7 @@ const ConversationScreen = () => {
           style={tailwind.style('rounded-[26px] overflow-hidden')}
           animationConfigs={animationConfigs}
           enablePanDownToClose
+          enableDynamicSizing={false}
           snapPoints={filterSnapPoints}
           onDismiss={handleOnDismiss}>
           <BottomSheetWrapper>
