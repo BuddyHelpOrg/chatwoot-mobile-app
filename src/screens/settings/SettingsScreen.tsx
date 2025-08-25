@@ -348,7 +348,7 @@ const SettingsScreen = () => {
         animationConfigs={animationConfigs}
         handleStyle={tailwind.style('p-0 h-4 pt-[5px]')}
         style={tailwind.style('rounded-[26px] overflow-hidden')}
-        snapPoints={['52%', '95%']}
+        snapPoints={['95%']}
         index={1}>
         <BottomSheetScrollView>
           <BottomSheetHeader headerText={i18n.t('SETTINGS.NOTIFICATION_PREFERENCES')} />
