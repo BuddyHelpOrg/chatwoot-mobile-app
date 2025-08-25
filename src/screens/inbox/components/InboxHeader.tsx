@@ -60,7 +60,8 @@ export const InboxHeader = (props: InboxHeaderProps) => {
         style={tailwind.style('rounded-[26px] overflow-hidden')}
         animationConfigs={animationConfigs}
         enablePanDownToClose
-        snapPoints={[160]}>
+        enableDynamicSizing={false}
+        snapPoints={['95%']}>
         <BottomSheetWrapper>
           <InboxFilters />
         </BottomSheetWrapper>
