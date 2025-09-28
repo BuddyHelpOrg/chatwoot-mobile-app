@@ -61,7 +61,7 @@ export const InboxHeader = (props: InboxHeaderProps) => {
         animationConfigs={animationConfigs}
         enablePanDownToClose
         enableDynamicSizing={false}
-        snapPoints={['95%']}>
+        snapPoints={['20%']}>
         <BottomSheetWrapper>
           <InboxFilters />
         </BottomSheetWrapper>
