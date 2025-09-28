@@ -297,15 +297,15 @@ const ConversationScreen = () => {
   const filterSnapPoints = useMemo(() => {
     switch (currentBottomSheet) {
       case 'status':
-        return ['95%'];
+        return ['35%'];
       case 'sort_by':
-        return ['95%'];
+        return ['25%'];
       case 'assignee_type':
-        return ['95%'];
+        return ['25%'];
       case 'inbox_id':
-        return ['95%'];
+        return ['70%'];
       default:
-        return ['95%'];
+        return ['250'];
     }
   }, [currentBottomSheet]);
 
